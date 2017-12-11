@@ -9,6 +9,16 @@ from django.db.models import F
 from .models import SsuperLecture
 import re
 
+def check(request):
+    queryword = '알고리즘'
+    lectures = SsuperLecture.objects.filter(lecutrename__contains = queryword)
+    db_str = ''
+
+    for lecture in lectures:
+        db_str = "'과목명' : "+lecture.lecutrename + ", '교수명' : "+lecture.professor + ", '평점' : " + lecture.rate + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
+        #print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
+
+    return HttpResponse(db_str)
 
 
 def check_lecturename(keyword):
