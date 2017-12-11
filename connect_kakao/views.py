@@ -83,7 +83,7 @@ def message(request):
         }
         use_btn_lecture = True
 
-    elif "1-2.Search - Professor" == content:
+    elif "1-2.Search - Professor" == intentName:
         str_professor = re.findall(regex, content)
         data_will_be_send = {
             'message': {
