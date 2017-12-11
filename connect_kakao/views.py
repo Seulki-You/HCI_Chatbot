@@ -7,8 +7,9 @@ import json, datetime
 from . import connect_apiai
 from django.db.models import F
 from .models import SsuperLecture
+import re
 
-def check(keyword):
+def check_lecturename(keyword):
     queryword = keyword
     lectures = SsuperLecture.objects.filter(lecutrename__contains = queryword)
     db_str = ''
@@ -18,6 +19,15 @@ def check(keyword):
 
     return db_str
 
+def check_professor(keyword):
+    queryword = keyword
+    professors = SsuperLecture.objects.filter(professor__contains=queryword)
+    db_list = []
+    for professor in professors:
+        db_list.append(professor.lecutrename)
+        # print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
+
+    return db_list
 
 def index(request):
     return render(request, 'index.html')
@@ -37,7 +47,7 @@ def keyboard(request):
         'type': 'text'
     })
 
-
+regex = r'[가-힣]+'
 @csrf_exempt
 def message(request):
     json_str = ((request.body).decode('utf-8'))
@@ -48,20 +58,25 @@ def message(request):
     intentName = connect_apiai.get_apiai_intent(content)
 
     if "1-1. Search - assessment lecture" == intentName:
-        apiai_keyword = connect_apiai.get_apiai(content)  # 아마 안될 것 수정해야해
+        str_lecturename = re.findall(regex, content)
+        #apiai_keyword = connect_apiai.get_apiai(content)  # 아마 안될 것 수정해야해
         data_will_be_send = {
             'message':{
-                'text' : check(apiai_keyword)
-
+                'text' : check_lecturename(''.join(str_lecturename))
             }
-
         }
 
     elif "1-2.Search - Professor" in content:
+        str_professor = re.findall(regex, content)
         data_will_be_send = {
             'message': {
-                'text': "hi"
+                'text': str_professor + '교수님 검색 결과입니다.'
+            },
+            "keybooard" : {
+                "type": "buttons",
+                "buttons" : check_professor(str_professor)
             }
+
             # ,
             # 'keyboard': {
             #     'type': 'buttons',
