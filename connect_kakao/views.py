@@ -6,16 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 import json, datetime
 from . import connect_apiai
 from django.db.models import F
-from .models import SsuperLecture
+from .models import Lecture
 import re
 
 def check(request):
     queryword = '알고리즘'
-    lectures = SsuperLecture.objects.filter(lecutrename__contains = queryword)
+    lectures = Lecture.objects.filter(lecturename__contains = queryword)
     db_str = ''
 
     for lecture in lectures:
-        db_str = "'과목명' : "+lecture.lecutrename + ", '교수명' : "+lecture.professor + ", '평점' : " + lecture.rate + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
+        db_str = "'과목명' : "+lecture.lecturename + ", '교수명' : "+lecture.professor + ", '평점' : " + lecture.rate + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
         #print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
 
     return HttpResponse(db_str)
@@ -23,25 +23,25 @@ def check(request):
 
 def check_lecturename(keyword):
     queryword = keyword
-    lectures = SsuperLecture.objects.filter(lecutrename__contains = queryword)
+    lectures = Lecture.objects.filter(lecturename__contains = queryword)
     db_str = ''
     db_dict_str = []
     db_list = []
     for lecture in lectures:
-        db_list.append('과목명 : '+lecture.lecutrename + ', 교수명 : '+lecture.professor)
-        db_str = "'과목명' : "+lecture.lecutrename + ", '교수명' : "+lecture.professor + ", '평점' : " + lecture.rate + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
+        db_list.append('과목명 : '+lecture.lecturename + ', 교수명 : '+lecture.professor)
+        db_str = "'과목명' : "+lecture.lecturename + ", '교수명' : "+lecture.professor + ", '평점' : " + lecture.rate + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
         db_dict_str.append(db_str)
-        #print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
+        #print(lecture.lecturename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
 
     return db_list,db_dict_str
 
 def check_professor(keyword):
     queryword = keyword
-    professors = SsuperLecture.objects.filter(professor__contains=queryword)
+    professors = Lecture.objects.filter(professor__contains=queryword)
     db_list = []
     for professor in professors:
-        db_list.append(professor.lecutrename)
-        # print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
+        db_list.append(professor.lecturename)
+        # print(lecture.lecturename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
 
     return db_list
 
@@ -109,10 +109,10 @@ def message(request):
 
     elif use_btn_professor:
         content = 'seach professor'+content   #의미 없는 듯 str을 dict나 list로 변경
-        lecture = SsuperLecture.objects.filter(lecutrename=content, professor__contain=s_professor)
+        lecture = Lecture.objects.filter(lecturename=content, professor__contain=s_professor)
         str_data = ''
         for data in lecture:
-            str_data = "과목명 : " + data.lecutrename + ", 교수명 : " + data.professor + ", 평점 : " + data.rate + "\n 시험 횟수 : " + data.exam + ", 과제량 : " + data.homework + ", 학점 비율 : " + data.grade + ", 조모임 : " + data.team + "\n강의평 : " + lecture.text
+            str_data = "과목명 : " + data.lecturename + ", 교수명 : " + data.professor + ", 평점 : " + data.rate + "\n 시험 횟수 : " + data.exam + ", 과제량 : " + data.homework + ", 학점 비율 : " + data.grade + ", 조모임 : " + data.team + "\n강의평 : " + lecture.text
         data_will_be_send = {
             'message': {
                 'text': str_data

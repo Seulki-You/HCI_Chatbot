@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'SSUperBot.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lecture',
-        'HOST': 'localhost',
+        'NAME': 'heroku_2ef9e9bc9261931',
+        'HOST': 'us-cdbr-iron-east-05.cleardb.net',
         'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'dotnf369!@',
+        'USER': 'b5aebf5355d457',
+        'PASSWORD': '9632c334',
     }
 }
 
