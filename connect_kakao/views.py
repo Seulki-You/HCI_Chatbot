@@ -58,7 +58,7 @@ def message(request):
     json_str = ((request.body).decode('utf-8'))
     received_json_data = json.loads(json_str)
     content = received_json_data['content']
-    dict_str=[]
+    dict_str = []
 
     if not use_btn_lecture and not use_btn_professor:
         intentName = connect_apiai.get_apiai_intent(content)
@@ -83,7 +83,7 @@ def message(request):
         }
         use_btn_lecture = True
 
-    elif "1-2.Search - Professor" in content:
+    elif "1-2.Search - Professor" == content:
         str_professor = re.findall(regex, content)
         data_will_be_send = {
             'message': {
