@@ -129,7 +129,7 @@ def message(request):
     else:
         data_will_be_send = {
             'message': {
-                'text': connect_apiai.get_apiai(content)
+                'text': connect_apiai.get_apiai(content) + str(use_btn_professor)
             }
 
         }
