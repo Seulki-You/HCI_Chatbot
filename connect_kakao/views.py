@@ -103,7 +103,8 @@ def message(request):
 
     elif "1-2.Search - Professor" == intentName:
         str_professor = re.findall(regex, content)
-        print(type(str_professor))
+        list = check_professor(str_professor)
+        #print(type(str_professor))
         if str_professor == '':
             data_will_be_send = {
                 'message': {
@@ -113,11 +114,11 @@ def message(request):
         elif str_professor != str_professor.empty:
             data_will_be_send = {
                 'message': {
-                    'text': str_professor + '교수님 검색 결과입니다. \n원하시는 과목을 선택해주세요.'
+                    'text': str(str_professor) + '교수님 검색 결과입니다. \n원하시는 과목을 선택해주세요.'
                 },
                 "keybooard": {
                     "type": "buttons",
-                    "buttons": check_professor(str_professor)
+                    "buttons": list
                 }
             }
             use_btn_professor = True
