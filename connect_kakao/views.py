@@ -10,15 +10,16 @@ from .models import Lecture
 import re
 
 def check(request):
-    queryword = '알고리즘'
-    lectures = Lecture.objects.filter(lecturename__contains = queryword)
+    queryword = '정기철'
+    lectures = Lecture.objects.filter(professor__contains = queryword)
     db_str = ''
-
+    db_list = []
     for lecture in lectures:
+        db_list.append(lecture.lecturename)
         db_str = "'과목명' : "+lecture.lecturename + ", '교수명' : "+lecture.professor + ", '평점' : " + str(lecture.rate) + ", '시험 횟수' : " + lecture.exam + ", '과제량' : " + lecture.homework + ", '학점 비율' : "+lecture.grade + ", '조모임' : "+lecture.team + ", '강의평' : "+lecture.text
         #print(lecture.lecutrename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
-
-    return HttpResponse(db_str)
+    print(db_list)
+    return HttpResponse(db_list)
 
 
 def check_lecturename(keyword):
@@ -43,6 +44,7 @@ def check_professor(keyword):
         db_list.append(professor.lecturename)
         # print(lecture.lecturename, lecture.professor, lecture.rate, lecture.exam, lecture.homework, lecture.grade, lecture.team, lecture.text)
 
+    #print(db_list)
     return db_list
 
 def index(request):
@@ -101,6 +103,7 @@ def message(request):
 
     elif "1-2.Search - Professor" == intentName:
         str_professor = re.findall(regex, content)
+        print(type(str_professor))
         if str_professor == '':
             data_will_be_send = {
                 'message': {
@@ -152,7 +155,7 @@ def message(request):
     else:
         data_will_be_send = {
             'message': {
-                'text': connect_apiai.get_apiai(content) + str(use_btn_professor)
+                'text': connect_apiai.get_apiai(content)
             }
 
         }
