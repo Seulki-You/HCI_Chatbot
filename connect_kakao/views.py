@@ -80,32 +80,45 @@ def message(request):
 
     if "1-1. Search - assessment lecture" == intentName:
         str_lecturename = re.findall(regex, content)
-        list, dict_str = check_lecturename(' '.join(str_lecturename))
-        #apiai_keyword = connect_apiai.get_apiai(content)  # 아마 안될 것 수정해야해
-        data_will_be_send = {
-            'message':{
-                'text' : ' '.join(str_lecturename) + " 과목의 검색 결과입니다. \n원하시는 과목을 선택해주세요."
-            },
-            "keyboard":{
-                "type": "buttons",
-                "buttons": list,
+        if str_lecturename == '':
+            data_will_be_send = {
+                'message': {
+                    'text': connect_apiai.get_apiai(content)
+                },
             }
-        }
-        use_btn_lecture = True
+        elif str_lecturename != str_lecturename.empty:
+            list, dict_str = check_lecturename(' '.join(str_lecturename))
+            data_will_be_send = {
+                'message':{
+                    'text' : ' '.join(str_lecturename) + " 과목의 검색 결과입니다. \n원하시는 과목을 선택해주세요."
+                },
+                "keyboard":{
+                    "type": "buttons",
+                    "buttons": list,
+                }
+            }
+            use_btn_lecture = True
 
     elif "1-2.Search - Professor" == intentName:
         str_professor = re.findall(regex, content)
-        data_will_be_send = {
-            'message': {
-                'text': str_professor + '교수님 검색 결과입니다. \n원하시는 과목을 선택해주세요.'
-            },
-            "keybooard": {
-                "type": "buttons",
-                "buttons": check_professor(str_professor)
+        if str_professor == '':
+            data_will_be_send = {
+                'message': {
+                    'text': connect_apiai.get_apiai(content)
+                },
             }
-        }
-        use_btn_professor = True
-        s_professor = str_professor
+        elif str_professor != str_professor.empty:
+            data_will_be_send = {
+                'message': {
+                    'text': str_professor + '교수님 검색 결과입니다. \n원하시는 과목을 선택해주세요.'
+                },
+                "keybooard": {
+                    "type": "buttons",
+                    "buttons": check_professor(str_professor)
+                }
+            }
+            use_btn_professor = True
+            s_professor = str_professor
 
     elif use_btn_professor:
         content = 'seach professor'+content   #의미 없는 듯 str을 dict나 list로 변경
